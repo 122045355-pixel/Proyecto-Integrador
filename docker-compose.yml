@@ -8,8 +8,6 @@ services:
       MYSQL_DATABASE: gestion_documental
       MYSQL_USER: gestion_user
       MYSQL_PASSWORD: gestion_pass
-    ports:
-      - "3308:3306"
     volumes:
       - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
       - mysql_data:/var/lib/mysql

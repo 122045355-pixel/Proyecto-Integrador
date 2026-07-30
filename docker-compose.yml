@@ -95,6 +95,20 @@ services:
     networks:
       - legal_net
 
+  haproxy:
+    image: haproxy:3.0-alpine
+    container_name: haproxy_proxy
+    restart: always
+    depends_on:
+      - api_v4
+      - api2_v4
+    ports:
+      - "8081:80"
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    networks:
+      - legal_net
+
   nginx:
     image: nginx:1.27-alpine
     container_name: nginx_proxy

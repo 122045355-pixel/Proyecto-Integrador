@@ -2,421 +2,310 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Frontend API Seguridad Documental</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escritorio Documental Legal</title>
     <style>
+        :root {
+            --bg: #f7f7fb;
+            --surface: #ffffff;
+            --muted: #667085;
+            --text: #182230;
+            --border: #d0d5dd;
+            --primary: #63081d;
+            --primary-soft: #f7e8ed;
+            --success: #067647;
+            --warning: #b54708;
+            --danger: #b42318;
+        }
+
+        * { box-sizing: border-box; }
+
         body {
+            margin: 0;
             font-family: Arial, sans-serif;
-            margin: 40px;
-            background: #f5f5f5;
-            color: #222;
+            background: var(--bg);
+            color: var(--text);
         }
 
-        .container {
-            max-width: 1100px;
-            margin: auto;
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
+        .shell {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 24px;
         }
 
-        h1, h2 {
-            margin-top: 0;
-        }
-
-        .card {
-            border: 1px solid #ddd;
-            padding: 18px;
+        .topbar, .card, .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
             border-radius: 8px;
-            margin-bottom: 18px;
-            background: #fafafa;
         }
 
-        .row {
+        .topbar {
+            padding: 18px;
             display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 16px;
             align-items: center;
+            margin-bottom: 16px;
         }
 
-        button {
-            padding: 8px 14px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background: #1f5eff;
-            color: white;
-        }
+        h1, h2, h3 { margin: 0; }
 
-        button:hover {
-            opacity: 0.9;
-        }
+        h1 { font-size: 24px; }
+        h2 { font-size: 18px; margin-bottom: 12px; }
+        h3 { font-size: 15px; margin-bottom: 8px; }
 
-        button.danger {
-            background: #b00020;
-        }
+        .muted { color: var(--muted); font-size: 14px; }
+        .grid { display: grid; grid-template-columns: 320px 1fr; gap: 16px; }
+        .stack { display: grid; gap: 12px; }
+        .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+        .card, .panel { padding: 16px; }
 
         input, select {
-            padding: 8px;
-            border: 1px solid #bbb;
-            border-radius: 5px;
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: white;
         }
 
-        code {
-            background: #eee;
-            padding: 2px 5px;
-            border-radius: 4px;
+        label { display: grid; gap: 6px; color: var(--muted); font-size: 13px; font-weight: 700; }
+
+        button, .button {
+            border: 0;
+            border-radius: 6px;
+            padding: 10px 14px;
+            cursor: pointer;
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        pre {
-            background: #111;
-            color: #0f0;
-            padding: 15px;
-            overflow-x: auto;
-            border-radius: 8px;
-        }
+        button.secondary, .button.secondary { background: #344054; }
+        button.danger { background: var(--danger); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 5px;
-            background: #eee;
-            margin-right: 5px;
-            margin-bottom: 5px;
+            display: inline-flex;
+            align-items: center;
+            border-radius: 999px;
+            padding: 6px 10px;
+            background: var(--primary-soft);
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 800;
         }
 
-        .badge.good {
-            background: #dff5df;
-            border: 1px solid #8bc48b;
-        }
+        .badge.success { background: #dcfae6; color: var(--success); }
+        .badge.warning { background: #fef0c7; color: var(--warning); }
+        .badge.danger { background: #fee4e2; color: var(--danger); }
 
-        .badge.warn {
-            background: #fff3cd;
-            border: 1px solid #d6b656;
-        }
+        .list { display: grid; gap: 10px; }
 
-        .badge.danger {
-            background: #ffe0e0;
-            border: 1px solid #cc7777;
-        }
-
-        .ok {
-            background: #dff5df;
-            border: 1px solid #8bc48b;
-        }
-
-        .error {
-            background: #ffe0e0;
-            border: 1px solid #cc7777;
-        }
-
-        .muted {
-            color: #666;
-            font-size: 0.95em;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 12px;
-        }
-
-        .mini-card {
-            border: 1px solid #ddd;
+        .list-item {
+            border: 1px solid var(--border);
             border-radius: 8px;
             padding: 12px;
             background: white;
         }
 
-        .hidden {
-            display: none;
+        .list-item.active { border-color: var(--primary); background: #fff8fb; }
+        .list-title { font-weight: 800; margin-bottom: 4px; }
+        .meta { color: var(--muted); font-size: 13px; }
+        .split { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+
+        pre {
+            background: #101828;
+            color: #d1fadf;
+            padding: 14px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        .notice {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            background: #f9fafb;
+            margin-bottom: 12px;
+        }
+
+        .notice.error { border-color: #fda29b; background: #fff1f3; color: var(--danger); }
+
+        @media (max-width: 860px) {
+            .grid { grid-template-columns: 1fr; }
+            .topbar { align-items: flex-start; flex-direction: column; }
         }
     </style>
 </head>
-
-<body data-api-version="{{ api_version }}">
-<div class="container">
-    <h1>API Seguridad Documental</h1>
-
-    <!-- API ACTIVA -->
-    <div class="card">
-        <h2>API activa</h2>
-
-        <p>
-            <span class="badge">Versión: {{ api_version.upper() }}</span>
-            <span class="badge">URL interna: {{ api_url }}</span>
-
-            {% if requiere_api_key %}
-                <span class="badge good">Usa API Key</span>
-            {% else %}
-                <span class="badge danger">Sin API Key</span>
+<body>
+    <main class="shell">
+        <section class="topbar">
+            <div>
+                <h1>Escritorio Documental Legal</h1>
+                <p class="muted">API interna: {{ api_url }} · Vista web con permisos por rol</p>
+            </div>
+            {% if usuario %}
+                <form method="POST">
+                    <input type="hidden" name="accion" value="logout">
+                    <button class="secondary" type="submit">Cerrar sesion</button>
+                </form>
             {% endif %}
+        </section>
 
-            {% if requiere_jwt %}
-                <span class="badge good">Usa JWT</span>
-            {% else %}
-                <span class="badge danger">Sin JWT</span>
-            {% endif %}
-        </p>
-
-        <form method="POST" class="row">
-            <input type="hidden" name="accion" value="cambiar_api">
-
-            <select name="api_version" onchange="this.form.submit()">
-                <option value="v1" {% if api_version == "v1" %}selected{% endif %}>
-                    V1 - Sin seguridad
-                </option>
-                <option value="v2" {% if api_version == "v2" %}selected{% endif %}>
-                    V2 - API Key
-                </option>
-                <option value="v3" {% if api_version == "v3" %}selected{% endif %}>
-                    V3 - API Key + JWT
-                </option>
-                <option value="v4" {% if api_version == "v4" %}selected{% endif %}>
-                    V4 - API Key + JWT + Roles + BOLA/IDOR
-                </option>
-                <option value="v5" {% if api_version == "v5" %}selected{% endif %}>
-                    V5 - API Key + JWT + Roles + Rate limiting
-                </option>
-            </select>
-
-            <button type="submit">Cambiar API</button>
-        </form>
-
-        <p class="muted">
-            Al cambiar de API se limpia el token para evitar mezclar sesiones entre versiones.
-        </p>
-    </div>
-
-    <!-- EXPLICACIÓN POR VERSIÓN -->
-    <div class="card js-section" data-show-for="v1">
-        <h2>Modo V1 - API sin seguridad</h2>
-        <p>
-            Esta versión no requiere API Key, JWT, login ni roles.
-            Cualquier cliente puede consultar documentos o proyectos directamente.
-        </p>
-    </div>
-
-    <div class="card js-section" data-show-for="v2">
-        <h2>Modo V2 - API Key</h2>
-        <p>
-            Esta versión requiere una API Key. El frontend envía automáticamente
-            el header:
-        </p>
-        <pre>x-api-key: ABC123</pre>
-    </div>
-
-    <div class="card js-section" data-show-for="v3">
-        <h2>Modo V3 - API Key + JWT</h2>
-        <p>
-            Esta versión requiere API Key y también login con JWT.
-            Primero debes iniciar sesión. Después, el frontend enviará:
-        </p>
-        <pre>Authorization: Bearer &lt;token&gt;</pre>
-    </div>
-
-    <div class="card js-section" data-show-for="v4">
-        <h2>Modo V4 - API Key + JWT + Roles + BOLA/IDOR</h2>
-        <p>
-            Esta versión valida API Key, JWT, roles y propiedad del recurso.
-            También incluye una ruta vulnerable para demostrar BOLA/IDOR.
-        </p>
-    </div>
-
-    <div class="card js-section" data-show-for="v5">
-        <h2>Modo V5 - API Key + JWT + Roles + BOLA/IDOR + Rate Limiter</h2>
-        <p>
-            Esta versión valida API Key, JWT, roles y propiedad del recurso.
-            También incluye una ruta vulnerable para demostrar BOLA/IDOR.
-            Limita solicitudes de la API
-        </p>
-    </div>
-
-    <!-- LOGIN -->
-    <div class="card js-section" data-show-for="v3 v4 v5">
-        <h2>Login</h2>
-
-        <form method="POST" class="row">
-            <input type="hidden" name="accion" value="login">
-
-            <input type="email" name="email" placeholder="email" value="isabel@email.com" required >
-
-            <input type="password" name="password" placeholder="password" value="123456" required >
-
-            <button type="submit">Login</button>
-        </form>
-
-        <p class="muted">
-            Usuarios de prueba:
-            <code>isabel@email.com / 123456</code>,
-            <code>samantha@email.com / 123456</code>,
-            <code>luis@email.com / admin123</code>,
-            <code>admin@legal.com / admin123</code>
-        </p>
-
-        <form method="POST">
-            <input type="hidden" name="accion" value="logout">
-            <button type="submit" class="danger">Cerrar sesión</button>
-        </form>
-
-        {% if usuario %}
-            <h3>Usuario autenticado</h3>
-            <pre>{{ usuario | tojson(indent=2) }}</pre>
+        {% if message %}
+            <div class="notice error">{{ message }}</div>
         {% endif %}
 
-        {% if token %}
-            <p class="muted">
-                Token JWT guardado en la sesión del frontend.
-            </p>
+        {% if not usuario %}
+            <section class="card">
+                <h2>Inicio de sesion</h2>
+                <form method="POST" class="stack">
+                    <input type="hidden" name="accion" value="login">
+                    <label>
+                        Correo
+                        <input type="email" name="email" placeholder="usuario@dominio.com" required>
+                    </label>
+                    <label>
+                        Contrasena
+                        <input type="password" name="password" placeholder="Contrasena" required>
+                    </label>
+                    <button type="submit">Entrar al escritorio</button>
+                </form>
+                <p class="muted">La sesion usa JWT emitido por la API. La descarga web queda condicionada por rol.</p>
+            </section>
+        {% else %}
+            <section class="grid">
+                <aside class="stack">
+                    <div class="card">
+                        <h2>Usuario</h2>
+                        <div class="stack">
+                            <div>
+                                <div class="list-title">{{ usuario.name }}</div>
+                                <div class="meta">{{ usuario.email }}</div>
+                            </div>
+                            <span class="badge">Rol: {{ usuario.role }}</span>
+                            {% if usuario.can_download_web %}
+                                <span class="badge success">Descarga web autorizada</span>
+                            {% else %}
+                                <span class="badge danger">Sin descarga web</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2>Permisos</h2>
+                        <div class="list">
+                            {% for permission in usuario.permissions %}
+                                <div class="list-item">{{ permission }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2>Casos visibles</h2>
+                        <form method="GET" class="stack">
+                            <label>
+                                Expediente
+                                <select name="case_id" onchange="this.form.submit()">
+                                    {% for case in cases %}
+                                        <option value="{{ case.id }}" {% if selected_case_id|string == case.id|string %}selected{% endif %}>
+                                            {{ case.title }} · {{ case.status }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                        </form>
+                        {% if not cases %}
+                            <p class="muted">La API no devolvio casos visibles para este rol.</p>
+                        {% endif %}
+                    </div>
+                </aside>
+
+                <section class="stack">
+                    <div class="panel">
+                        <div class="split">
+                            <div>
+                                <h2>Documentos autorizados</h2>
+                                <p class="muted">La lista proviene de `/api/cases/{id}/documents`; no se muestran documentos fuera del rol.</p>
+                            </div>
+                            <span class="badge">{{ documents|length }} visibles</span>
+                        </div>
+
+                        <div class="list">
+                            {% for document in documents %}
+                                <form method="GET" class="list-item {% if selected_document_id|string == document.id|string %}active{% endif %}">
+                                    <input type="hidden" name="case_id" value="{{ selected_case_id }}">
+                                    <input type="hidden" name="document_id" value="{{ document.id }}">
+                                    <div class="split">
+                                        <div>
+                                            <div class="list-title">{{ document.title }}</div>
+                                            <div class="meta">{{ document.document_type }} · {{ document.classification }} · v{{ document.current_version }}</div>
+                                        </div>
+                                        <span class="badge warning">{{ document.status }}</span>
+                                    </div>
+                                    <p class="muted">{{ document.description or 'Documento legal protegido.' }}</p>
+                                    <button type="submit">Visualizar</button>
+                                </form>
+                            {% endfor %}
+                        </div>
+
+                        {% if not documents %}
+                            <p class="muted">No hay documentos visibles en este expediente para el usuario autenticado.</p>
+                        {% endif %}
+                    </div>
+
+                    {% if document_view %}
+                        <div class="panel">
+                            <div class="split">
+                                <div>
+                                    <h2>{{ document_view.document.title }}</h2>
+                                    <p class="muted">Vista protegida registrada en auditoria por la API.</p>
+                                </div>
+                                {% if document_view.download_allowed %}
+                                    <span class="badge success">Descarga permitida</span>
+                                {% else %}
+                                    <span class="badge danger">Descarga restringida</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="row">
+                                <span class="badge">{{ document_view.document.classification }}</span>
+                                <span class="badge">{{ document_view.document.status }}</span>
+                                <span class="badge">v{{ document_view.document.current_version }}</span>
+                            </div>
+
+                            {% if document_view.current_file %}
+                                <div class="notice">
+                                    <strong>Archivo actual:</strong>
+                                    {{ document_view.current_file.original_name }} · SHA-256 {{ document_view.current_file.sha256 }}
+                                </div>
+                            {% endif %}
+
+                            <form method="POST" class="row">
+                                <input type="hidden" name="accion" value="download">
+                                <input type="hidden" name="case_id" value="{{ selected_case_id }}">
+                                <input type="hidden" name="document_id" value="{{ selected_document_id }}">
+                                <button type="submit" {% if not document_view.download_allowed %}disabled{% endif %}>
+                                    Solicitar descarga web
+                                </button>
+                                <span class="muted">La API vuelve a validar rol antes de autorizar.</span>
+                            </form>
+                        </div>
+                    {% endif %}
+
+                    {% if resultado %}
+                        <div class="panel">
+                            <h2>Ultima respuesta API</h2>
+                            <p class="muted">Status {{ resultado.status_code }} · {{ resultado.url }}</p>
+                            <pre>{{ resultado.data | tojson(indent=2) }}</pre>
+                        </div>
+                    {% endif %}
+                </section>
+            </section>
         {% endif %}
-    </div>
-
-    <!-- CONSULTAS GENERALES -->
-    <div class="card js-section" data-show-for="v1 v2 v3 v4 v5">
-        <h2>Consultas de documentos y proyectos</h2>
-
-        <form method="POST" class="row">
-            <button
-                name="accion"
-                value="perfil"
-                type="submit"
-                class="js-inline"
-                data-show-for="v3 v4 v5"
-            >
-                Consultar perfil
-            </button>
-
-            <button name="accion" value="documentos" type="submit">
-                Consultar documentos
-            </button>
-
-            <button name="accion" value="proyectos" type="submit">
-                Consultar proyectos
-            </button>
-        </form>
-
-        <p class="muted js-section" data-show-for="v1">
-            En V1 estas consultas deben funcionar sin credenciales.
-        </p>
-
-        <p class="muted js-section" data-show-for="v2">
-            En V2 estas consultas usan API Key automáticamente desde el frontend.
-        </p>
-
-        <p class="muted js-section" data-show-for="v3">
-            En V3 necesitas hacer login antes de consultar endpoints protegidos.
-        </p>
-
-        <p class="muted js-section" data-show-for="v4">
-            En V4 algunas consultas pueden fallar por rol. Por ejemplo, un usuario no debería listar todos los documentos o proyectos.
-        </p>
-        
-        <p class="muted js-section" data-show-for="v5">
-            En V5 algunas consultas pueden fallar por rol. Tambien puede fallar por exceso de intentos.
-        </p>
-    </div>
-
-    <!-- CONSULTAS POR ID -->
-    <div class="card js-section" data-show-for="v1 v2 v3 v4 v5">
-        <h2>Consultas por ID de documentos y proyectos</h2>
-
-        <form method="POST" class="row">
-            <input type="hidden" name="accion" value="documento_id">
-            <input type="number" name="id_documento" value="1" min="1">
-            <button type="submit">Consultar documento por ID</button>
-        </form>
-
-        <br>
-
-        <form method="POST" class="row">
-            <input type="hidden" name="accion" value="proyecto_id">
-            <input type="number" name="id_proyecto" value="1" min="1">
-            <button type="submit">Consultar proyecto por ID</button>
-        </form>
-
-        <p class="muted js-section" data-show-for="v4">
-            En V4 o V5, si haces login como Isabel, consultar documento ID 1 debe funcionar,
-            pero documento ID 2 debe fallar en la ruta protegida.
-        </p>
-    </div>
-
-    <!-- BOLA / IDOR -->
-    <div class="card js-section" data-show-for="v4 v5">
-        <h2>Demostración BOLA/IDOR</h2>
-
-        <p class="muted">
-            Esta prueba aplica en V4 y V5.
-            Haz login como Isabel y consulta el documento 2 en la ruta vulnerable.
-        </p>
-
-        <form method="POST" class="row">
-            <input type="hidden" name="accion" value="bola_vulnerable">
-            <input type="number" name="id_documento_vulnerable" value="2" min="1">
-            <button type="submit" class="danger">
-                Probar ruta vulnerable
-            </button>
-        </form>
-
-        <p class="muted">
-            Comparación recomendada:
-        </p>
-
-        <ol class="muted">
-            <li>Login como <code>isabel@email.com</code>.</li>
-            <li>Consultar documento por ID <code>2</code> en la ruta protegida. Debe fallar.</li>
-            <li>Probar ruta vulnerable con ID <code>2</code>. Debe mostrar datos.</li>
-        </ol>
-    </div>
-
-    <!-- RESULTADO -->
-    {% if resultado %}
-        <div class="card {% if resultado.ok %}ok{% else %}error{% endif %}">
-            <h2>Resultado</h2>
-
-            <p>
-                <strong>Status:</strong>
-                {{ resultado.status_code }}
-            </p>
-
-            {% if resultado.url %}
-                <p>
-                    <strong>URL llamada:</strong>
-                    {{ resultado.url }}
-                </p>
-            {% endif %}
-
-            <pre>{{ resultado.data | tojson(indent=2) }}</pre>
-        </div>
-    {% endif %}
-</div>
-
-<script>
-    function shouldShow(element, currentVersion) {
-        const showFor = element.dataset.showFor;
-
-        if (!showFor) {
-            return true;
-        }
-
-        return showFor
-            .split(" ")
-            .map(version => version.trim())
-            .includes(currentVersion);
-    }
-
-    function updateVisibleSections() {
-        const currentVersion = document.body.dataset.apiVersion;
-
-        document
-            .querySelectorAll(".js-section, .js-inline")
-            .forEach(element => {
-                element.style.display = shouldShow(element, currentVersion)
-                    ? ""
-                    : "none";
-            });
-    }
-
-    document.addEventListener("DOMContentLoaded", updateVisibleSections);
-</script>
+    </main>
 </body>
 </html>

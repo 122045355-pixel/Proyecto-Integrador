@@ -1,10 +1,35 @@
+import os
+
 from fastapi import Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
 from sqlalchemy.orm import Session
 
 from database import get_db
 from main_v4 import app, crear_token, generar_password_hash, validar_api_key
 from models import Role, User
+
+
+DEFAULT_CORS_ORIGINS = (
+    "http://localhost:8082,"
+    "http://127.0.0.1:8082,"
+    "http://localhost:19006,"
+    "http://127.0.0.1:19006"
+)
+
+cors_origins = [
+    origin.strip()
+    for origin in os.getenv("CORS_ORIGINS", DEFAULT_CORS_ORIGINS).split(",")
+    if origin.strip()
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=cors_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 class BootstrapAdminCreate(BaseModel):
